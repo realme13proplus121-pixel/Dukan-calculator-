@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Hisab Tool</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #eef2f3; }
+        .container { max-width: 450px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        h3 { color: #0056b3; margin-top: 0; }
+        label { display: block; margin-top: 10px; font-weight: 600; color: #555; }
+        input { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        
+        /* Green Button for Bill */
+        .btn-bill { width: 100%; padding: 12px; margin-top: 15px; background-color: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold;}
+        .btn-bill:hover { background-color: #218838; }
+
+        /* Blue Button for Weight */
+        .btn-weight { width: 100%; padding: 12px; margin-top: 15px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold;}
+        .btn-weight:hover { background-color: #0069d9; }
+
+        .result { margin-top: 15px; font-size: 18px; font-weight: bold; text-align: center; padding: 10px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #ddd; color: #d9534f; }
+        
+        .divider { border-top: 3px dashed #ccc; margin: 30px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Dukan Hisab Tool</h2>
+
+    <h3>1. Bill Nikalein (Price)</h3>
+    <label>Rate (Bhav) per Kg:</label>
+    <input type="number" id="rate1" placeholder="Ex: 120">
+
+    <div style="display: flex; gap: 10px;">
+        <div style="flex:1;">
+            <label>Kg:</label>
+            <input type="number" id="kg" placeholder="0">
+        </div>
+        <div style="flex:1;">
+            <label>Gram:</label>
+            <input type="number" id="gram" placeholder="0">
+        </div>
+    </div>
+
+    <button class="btn-bill" onclick="calculateBill()">Bill Batao</button>
+    <div class="result" id="outputBill">Total Bill: Rs 0</div>
+
+    <div class="divider"></div>
+
+    <h3>2. Wajan Nikalein (Weight)</h3>
+    <p style="font-size: 14px; color: #666;">(Grahak ne kitne rupaye diye?)</p>
+    
+    <label>Rate (Bhav) per Kg:</label>
+    <input type="number" id="rate2" placeholder="Ex: 120">
+
+    <label>Rupiya (Amount):</label>
+    <input type="number" id="amount" placeholder="Ex: 50">
+
+    <button class="btn-weight" onclick="calculateWeight()">Wajan Batao</button>
+    <div class="result" id="outputWeight">Wajan: 0 Kg 0 Gram</div>
+</div>
+
+<script>
+    // Function 1: Rate + Wajan -> Bill
+    function calculateBill() {
+        let rate = parseFloat(document.getElementById('rate1').value) || 0;
+        let kg = parseFloat(document.getElementById('kg').value) || 0;
+        let gram = parseFloat(document.getElementById('gram').value) || 0;
+
+        let totalWeight = kg + (gram / 1000);
+        let finalPrice = rate * totalWeight;
+
+        document.getElementById('outputBill').innerText = "Total Bill: Rs " + finalPrice.toFixed(2);
+    }
+
+    // Function 2: Rate + Rupiya -> Wajan
+    function calculateWeight() {
+        let rate = parseFloat(document.getElementById('rate2').value);
+        let amount = parseFloat(document.getElementById('amount').value);
+
+        if (!rate || rate === 0) {
+            document.getElementById('outputWeight').innerText = "Rate daalna zaroori hai!";
+            return;
+        }
+
+        // Logic: Weight = Amount / Rate
+        let totalKg = amount / rate; // Example: 1.5 kg
+        
+        let finalKg = Math.floor(totalKg); // 1 kg
+        let finalGram = Math.round((totalKg - finalKg) * 1000); // .5 * 1000 = 500g
+
+        document.getElementById('outputWeight').innerText = "Wajan: " + finalKg + " Kg " + finalGram + " Gram";
+    }
+</script>
+
+</body>
+</html>
